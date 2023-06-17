@@ -1,66 +1,21 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
+import { birds } from "./bird-catalog";
 
-let birds = [
-  {
-    name: "blue jay",
-    color: "blue",
-    region: "north america",
-  },
-  {
-    name: "sun conure",
-    color: "orange",
-    region: "south america",
-  },
-  {
-    name: "house sparrow",
-    color: "brown",
-    region: "north america",
-  },
-  {
-    name: "bald eagle",
-    color: "brown",
-    region: "north america",
-  },
-  {
-    name: "cockatiel",
-    color: "varies",
-    region: "australia",
-  },
-];
-birds.sort((a, b) => a.name.localeCompare(b.name));
-function ShowBirdList() {
-  return birds.map((bird, i) => (
-    <div key={i} className="birdDiv">
-      <ul>
-        <li>Name: {bird.name}</li>
-        <li>Color: {bird.color}</li>
-        <li>Region: {bird.region}</li>
-      </ul>
-    </div>
-  ));
-}
-
+// function showBirdsFound(id) {
+//   return birds.map((bird, id) => (
+//     <div key={id} className="birdDiv">
+//       <ul>
+//         <li>Name: {bird.name}</li>
+//         <li>Color: {bird.color}</li>
+//         <li>Region: {bird.region}</li>
+//       </ul>
+//     </div>
+//   ));
+// }
 export default function MyApp() {
   const [message, setMessage] = useState("");
-  const [birdName, setBirdName] = useState("");
-  const [birdColor, setBirdColor] = useState("");
-  const [birdRegion, setBirdRegion] = useState("");
-
-  const handleAddBird = (event) => {
-    event.preventDefault();
-    const newBird = {
-      name: birdName,
-      color: birdColor,
-      region: birdRegion,
-    };
-    birds.push(newBird);
-    setBirdName("");
-    setBirdColor("");
-    setBirdRegion("");
-    console.log(birds);
-  };
 
   return (
     <>
@@ -71,7 +26,7 @@ export default function MyApp() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div id="back">
+      <div className="back">
         <div className="mainPage">
           <h1>Hi, Welcome to Jimmy's Bird database</h1>
           <p>
@@ -90,7 +45,7 @@ export default function MyApp() {
                 ).length > 0
               ) {
                 setMessage("Bird found");
-
+                // showBirdsFound(bird.id);
                 console.log(
                   birds.filter(
                     (bird) => bird.name === e.target[0].value.toLowerCase()
@@ -104,37 +59,13 @@ export default function MyApp() {
             <input className="searchForm" type="text" placeholder="Search" />
             <button type="submit">Search</button>
           </form>
+          <p>{message}</p>
+          {/* <ShowBirdsFound /> */}
         </div>
-
-        <p>{message}</p>
-        <div className="addBird">
-          <form onSubmit={handleAddBird}>
-            <input
-              type="text"
-              placeholder="Name"
-              value={birdName}
-              onChange={(e) => setBirdName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Color"
-              value={birdColor}
-              onChange={(e) => setBirdColor(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Region"
-              value={birdRegion}
-              onChange={(e) => setBirdRegion(e.target.value)}
-            />
-            <button type="submit">Add</button>
-          </form>
-          <Link href="/bird-catalog">
-            <button id="catalogButton">Go to Jimmy's Bird Catalog</button>
-          </Link>
-          <br />
-          <ShowBirdList />
-        </div>
+        <Link href="/bird-catalog">
+          <button id="catalogButton">Go to Jimmy's Bird Catalog</button>
+        </Link>
+        <br />
       </div>
     </>
   );

@@ -16,13 +16,14 @@ body {
 h1 {
   margin-top: 0px;
 }
-#back {
+.back {
   padding: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
   background-color: white;
   opacity: 0.9;
 }
-#catalogButton {
+
+.addBird {
   margin-top: 18px;
 }
