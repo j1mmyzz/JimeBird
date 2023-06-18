@@ -1,4 +1,5 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+You can do the following too if u wanna edit the code but the link is https://jimebird.vercel.app
 
 ## Getting Started
 
