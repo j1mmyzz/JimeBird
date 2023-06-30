@@ -3,19 +3,37 @@ import Link from "next/link";
 import { useState } from "react";
 import { birds } from "./bird-catalog";
 
-// function showBirdsFound(id) {
-//   return birds.map((bird, id) => (
-//     <div key={id} className="birdDiv">
-//       <ul>
-//         <li>Name: {bird.name}</li>
-//         <li>Color: {bird.color}</li>
-//         <li>Region: {bird.region}</li>
-//       </ul>
-//     </div>
-//   ));
-// }
+// BirdComponent to display the bird details
+const BirdComponent = ({ bird }) => {
+  return (
+    <div>
+      <ul>
+        <li>Name: {bird.name}</li>
+        <li>Color: {bird.color}</li>
+        <li>Region: {bird.region}</li>
+      </ul>
+    </div>
+  );
+};
+
 export default function MyApp() {
   const [message, setMessage] = useState("");
+  const [foundBird, setFoundBird] = useState(null);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchValue = e.target[0].value.toLowerCase();
+    const foundBird = birds.find((bird) => bird.name === searchValue);
+
+    if (foundBird) {
+      setMessage("Bird found");
+      setFoundBird(foundBird);
+      console.log(foundBird);
+    } else {
+      setMessage("Bird not found");
+      setFoundBird(null);
+    }
+  };
 
   return (
     <>
@@ -36,32 +54,14 @@ export default function MyApp() {
         </div>
 
         <div className="birdSearch">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (
-                birds.filter(
-                  (bird) => bird.name === e.target[0].value.toLowerCase()
-                ).length > 0
-              ) {
-                setMessage("Bird found");
-                // showBirdsFound(bird.id);
-                console.log(
-                  birds.filter(
-                    (bird) => bird.name === e.target[0].value.toLowerCase()
-                  )
-                );
-              } else {
-                setMessage("Bird not found");
-              }
-            }}
-          >
+          <form onSubmit={handleSearch}>
             <input className="searchForm" type="text" placeholder="Search" />
             <button type="submit">Search</button>
           </form>
           <p>{message}</p>
-          {/* <ShowBirdsFound /> */}
+          {foundBird && <BirdComponent bird={foundBird} />}
         </div>
+
         <Link href="/bird-catalog">
           <button id="catalogButton">Go to Jimmy's Bird Catalog</button>
         </Link>
