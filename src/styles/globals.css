@@ -1,14 +1,14 @@
 body {
   display: flex;
   justify-content: center;
-  background-image: url("../../public/bg.jpg");
+  background-color: rgb(146, 231, 137);
+  /* background-image: url("../../public/bg.jpg"); */
 }
 .mainPage {
   display: inline-block;
 }
 .birdSearch {
   width: 50vw;
-  /* background-color: green; */
 }
 .searchForm {
   width: 200px;
@@ -17,13 +17,37 @@ h1 {
   margin-top: 0px;
 }
 .back {
+  border-radius: 10px;
   padding: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
   background-color: white;
-  opacity: 0.9;
+}
+.catalogButton {
+  background-color: rgb(146, 231, 137);
+  height: 30px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: green;
+  box-shadow: 10, 10, 10;
+}
+.backButton {
+  background-color: rgb(146, 231, 137);
+  height: 30px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: green;
+  box-shadow: 10, 10, 10;
 }
 
 .addBird {
   margin-top: 18px;
+}
+.centerplease {
+  display: flex;
+  justify-content: center;
+}
+.logoImage {
+  display: block;
+  width: 300px;
 }

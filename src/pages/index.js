@@ -43,6 +43,9 @@ export default function MyApp() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="centerplease">
+        <img className="logoImage" src="png/logo-color.png" />
+      </div>
 
       <div className="back">
         <div className="mainPage">
@@ -56,14 +59,16 @@ export default function MyApp() {
         <div className="birdSearch">
           <form onSubmit={handleSearch}>
             <input className="searchForm" type="text" placeholder="Search" />
-            <button type="submit">Search</button>
+            <button className="searchButton" type="submit">
+              Search
+            </button>
           </form>
           <p>{message}</p>
           {foundBird && <BirdComponent bird={foundBird} />}
         </div>
 
         <Link href="/bird-catalog">
-          <button id="catalogButton">Go to Jimmy's Bird Catalog</button>
+          <button className="catalogButton">Go to Jimmy's Bird Catalog</button>
         </Link>
         <br />
       </div>

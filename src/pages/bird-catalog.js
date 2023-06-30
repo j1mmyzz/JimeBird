@@ -65,7 +65,7 @@ function BirdCatalog() {
   return (
     <div className="back">
       <Link href="/">
-        <button>Back to Search</button>
+        <button className="catalogButton">Back to Search</button>
       </Link>
       <div className="addBird">
         <form onSubmit={handleAddBird}>
