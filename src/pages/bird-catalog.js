@@ -1,65 +1,51 @@
-import React from "react";
-import Head from "next/head";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useState } from "react";
-
-export let birds = [
-  {
-    name: "blue jay",
-    color: "blue",
-    region: "north america",
-  },
-  {
-    name: "sun conure",
-    color: "orange",
-    region: "south america",
-  },
-  {
-    name: "house sparrow",
-    color: "brown",
-    region: "north america",
-  },
-  {
-    name: "bald eagle",
-    color: "brown",
-    region: "north america",
-  },
-  {
-    name: "cockatiel",
-    color: "varies",
-    region: "australia",
-  },
-];
-birds.sort((a, b) => a.name.localeCompare(b.name));
-function ShowBirdList() {
-  return birds.map((bird, i) => (
-    <div key={i} className="birdDiv">
-      <ul>
-        <li>Name: {bird.name}</li>
-        <li>Color: {bird.color}</li>
-        <li>Region: {bird.region}</li>
-      </ul>
-    </div>
-  ));
-}
+import { db } from "../../lib/firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 function BirdCatalog() {
+  const [birds, setBirds] = useState([]);
   const [birdName, setBirdName] = useState("");
   const [birdColor, setBirdColor] = useState("");
   const [birdRegion, setBirdRegion] = useState("");
 
-  const handleAddBird = (event) => {
+  useEffect(() => {
+    const fetchBirds = async () => {
+      const querySnapshot = await getDocs(collection(db, "birds"));
+      const birdList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setBirds(birdList);
+    };
+
+    fetchBirds();
+  }, []);
+
+  //add a new bird to Firestore
+  const handleAddBird = async (event) => {
     event.preventDefault();
+
+    if (!birdName || !birdColor || !birdRegion) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
     const newBird = {
-      name: birdName,
+      name: birdName.toLowerCase(),
       color: birdColor,
       region: birdRegion,
     };
-    birds.push(newBird);
-    setBirdName("");
-    setBirdColor("");
-    setBirdRegion("");
-    console.log(birds);
+
+    try {
+      const docRef = await addDoc(collection(db, "birds"), newBird);
+      setBirds([...birds, { id: docRef.id, ...newBird }]); // Update UI immediately
+      setBirdName("");
+      setBirdColor("");
+      setBirdRegion("");
+    } catch (error) {
+      console.error("Error adding bird: ", error);
+    }
   };
 
   return (
@@ -67,6 +53,7 @@ function BirdCatalog() {
       <Link href="/">
         <button className="catalogButton">Back to Search</button>
       </Link>
+
       <div className="addBird">
         <form onSubmit={handleAddBird}>
           <input
@@ -90,7 +77,16 @@ function BirdCatalog() {
           <button type="submit">Add</button>
         </form>
       </div>
-      <ShowBirdList />
+
+      {birds.map((bird) => (
+        <div key={bird.id} className="birdDiv">
+          <ul>
+            <li>Name: {bird.name}</li>
+            <li>Color: {bird.color}</li>
+            <li>Region: {bird.region}</li>
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }

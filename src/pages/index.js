@@ -1,29 +1,49 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
-import { birds } from "./bird-catalog";
+import { useState, useEffect } from "react";
+import { db } from "../../lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 // BirdComponent to display the bird details
-const BirdComponent = ({ bird }) => {
-  return (
-    <div>
-      <ul>
-        <li>Name: {bird.name}</li>
-        <li>Color: {bird.color}</li>
-        <li>Region: {bird.region}</li>
-      </ul>
-    </div>
-  );
-};
+const BirdComponent = ({ bird }) => (
+  <div>
+    <ul>
+      <li>Name: {bird.name}</li>
+      <li>Color: {bird.color}</li>
+      <li>Region: {bird.region}</li>
+    </ul>
+  </div>
+);
 
 export default function MyApp() {
   const [message, setMessage] = useState("");
   const [foundBird, setFoundBird] = useState(null);
+  const [birds, setBirds] = useState([]); // Initialize as empty array
+
+  // Fetch birds from Firestore
+  useEffect(() => {
+    const fetchBirds = async () => {
+      const querySnapshot = await getDocs(collection(db, "birds"));
+      const birdList = querySnapshot.docs.map((doc) => doc.data()); // Get bird objects
+      setBirds(birdList); // Set state
+    };
+
+    fetchBirds();
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
     const searchValue = e.target[0].value.toLowerCase();
-    const foundBird = birds.find((bird) => bird.name === searchValue);
+
+    // Ensure birds is loaded before searching
+    if (!birds.length) {
+      setMessage("No birds available to search.");
+      return;
+    }
+
+    const foundBird = birds.find(
+      (bird) => bird.name.toLowerCase() === searchValue
+    );
 
     if (foundBird) {
       setMessage("Bird found");
@@ -49,7 +69,7 @@ export default function MyApp() {
 
       <div className="back">
         <div className="mainPage">
-          <h1>Hi, Welcome to Jimmy's Bird database</h1>
+          <h1>Hi, Welcome to Jimmy's Bird Database</h1>
           <p>
             This will be a database of birds that Jimmy can name off the top of
             his head.
